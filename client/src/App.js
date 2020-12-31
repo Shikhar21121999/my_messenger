@@ -1,8 +1,7 @@
-import React from 'react';
 
 function App() {
   return (
-    "Hello World"
+    <h>Hello world</h>
   );
 }
 
