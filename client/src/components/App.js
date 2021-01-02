@@ -1,7 +1,14 @@
 import Login from './Login';
+import React, { useState } from 'react';
 function App() {
+
+  const [id,Setid]=useState()
+
   return (
-    <Login/>
+    <>
+      <p>{id}</p>
+      <Login submit_id={Setid}/>
+    </>
   );
 }
 
