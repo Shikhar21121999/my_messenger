@@ -3,6 +3,13 @@ import {Container,Form,Button} from 'react-bootstrap';
 import {v4 as uuidV4} from 'uuid';
 
 export default function Login({submit_id}) {
+// eslint-disable-next-line no-lone-blocks
+{/*
+    Login component which takes submit_id as parameter
+    which is inturn a function Setid used to change state of id
+    hence whenever we call submit_id with value it will change state of id
+    in App.js
+*/}
     const idRef=useRef()
     
     function handel_submit(e){

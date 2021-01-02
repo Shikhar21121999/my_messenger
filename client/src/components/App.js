@@ -1,13 +1,19 @@
 import Login from './Login';
-import React, { useState } from 'react';
+import React from 'react';
+import useLocalStorage from '../hooks/useLocalStorage';
+import Dashboard from './Dashboard';
 function App() {
 
-  const [id,Setid]=useState()
-
+  const [id,Setid]=useLocalStorage('id',)
   return (
     <>
-      <p>{id}</p>
-      <Login submit_id={Setid}/>
+      {id ? <Dashboard id={id} /> : <Login submit_id={Setid}/> }
+      {/* Setid is passed as arguement
+          in Login component which is then
+          used to change state of id
+          that is whenever submit_id is called
+          it will set the value to the id state
+      */}
     </>
   );
 }
