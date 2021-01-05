@@ -1,4 +1,5 @@
-import React , {useState} from 'react';
+import React , {useState,useContext} from 'react';
+
 import {Tab, Nav, Button,Modal} from 'react-bootstrap';
 import Conversations from './Conversations.js';
 import Contacts from './Contacts.js';
@@ -14,6 +15,7 @@ const Sidebar = ({id}) => {
     const [activeKey,setActiveKey]=useState(CONVERSATIONS_KEY)
     const conversationsOpen = activeKey === CONVERSATIONS_KEY
     const [show,setShow]=useState(false)
+    
 
     const closeModal=() =>{
         setShow(false)
