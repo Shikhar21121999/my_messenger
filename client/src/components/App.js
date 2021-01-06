@@ -3,6 +3,7 @@ import React from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import Dashboard from './Dashboard';
 import {ContactsProvider} from '../Context/ContactsProvider';
+import { ConversationProvider } from '../Context/ConversationProvider';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
   return (
     <>
       <ContactsProvider>
+      <ConversationProvider>
       {id ? <Dashboard id={id} /> : <Login submit_id={Setid} /> }
       {/* Setid is passed as arguement
           in Login component which is then
@@ -19,6 +21,8 @@ function App() {
           that is whenever submit_id is called
           it will set the value to the id state
       */}
+
+      </ConversationProvider>
       </ContactsProvider>
     </>
   );
