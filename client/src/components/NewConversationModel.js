@@ -21,6 +21,18 @@ const NewConversationModel = ({ closeModal }) => {
         closeModal();
     }
 
+    // function handleCheckboxChange(contactId) {
+    //     setSelectedContactIds(prevSelectedContactIds => {
+    //       if (prevSelectedContactIds.includes(contactId)) {
+    //         return prevSelectedContactIds.filter(prevId => {
+    //           return contactId !== prevId
+    //         })
+    //       } else {
+    //         return [...prevSelectedContactIds, contactId]
+    //       }
+    //     })
+    //   }
+
     function handelcheckboxChange(contanctID){
         // This function is called whenever a id 
         // is included or removed from current conversation
@@ -30,11 +42,14 @@ const NewConversationModel = ({ closeModal }) => {
             if (prevSelectedContactIds.includes(contanctID)) {
                 // if it already includes then we have to remove it
                 return prevSelectedContactIds.filter(prev_id => {
-                    return prev_id !==contanctID;
+                    return prev_id !==contanctID
                 })
             }
             // else we need to just include it
-            return [...prevSelectedContactIds,contanctID];
+            else
+            {
+                return [...prevSelectedContactIds,contanctID];
+            }
         })
     }
 
@@ -49,7 +64,7 @@ const NewConversationModel = ({ closeModal }) => {
                                 type="checkbox" 
                                 label={contact.name}
                                 value={selectedContactIds.includes(contact.id)}
-                                onChange={handelcheckboxChange(contact.id)}
+                                onChange={() => handelcheckboxChange(contact.id)}
                             />
                         </Form.Group> 
                     ))}
