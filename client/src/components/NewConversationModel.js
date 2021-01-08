@@ -21,18 +21,6 @@ const NewConversationModel = ({ closeModal }) => {
         closeModal();
     }
 
-    // function handleCheckboxChange(contactId) {
-    //     setSelectedContactIds(prevSelectedContactIds => {
-    //       if (prevSelectedContactIds.includes(contactId)) {
-    //         return prevSelectedContactIds.filter(prevId => {
-    //           return contactId !== prevId
-    //         })
-    //       } else {
-    //         return [...prevSelectedContactIds, contactId]
-    //       }
-    //     })
-    //   }
-
     function handelcheckboxChange(contanctID){
         // This function is called whenever a id 
         // is included or removed from current conversation
