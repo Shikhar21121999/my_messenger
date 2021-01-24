@@ -1,8 +1,9 @@
 // Context wrapper to pass conversations and createConversations method
 
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useContacts } from './ContactsProvider';
+
 
 const ConversationContext = React.createContext()   // context for Conversation
 
@@ -16,11 +17,12 @@ export const ConversationProvider = ({children}) => {
     // to send with this context
     const [Conversation_lis,setConversation_lis]=useLocalStorage('conversations',[])
     const {contact_lis} = useContacts();
-
+    const [selectedConversationIndex,setSelectedConversationIndex]=useState(0)  // state to store currently selected conversation
     function createConversation(recipients){
         // function to create conversation
         // we store a conversation as an object consisting of recipients and messages
         // recipients is an array of id of contacts that are part of that conversation
+        // this internally calls setConversation_lis to change state of conversation_lis
         setConversation_lis(prevConversations => {
             return [...prevConversations, { recipients,messages:[] }]
         })
@@ -29,7 +31,8 @@ export const ConversationProvider = ({children}) => {
     // working with conversation as it is quite hard
     // as we get id of recipient and not name
     // so we convert it into object which has recipients as name
-    const frmetd_cov_lis=Conversation_lis.map(conversation => {
+    // we also add an attribute selected which is a boolean denoting wether element is selected
+    const frmetd_cov_lis=Conversation_lis.map((conversation,index) => {
         // for each conversation we get recipeints
         const recipients=conversation.recipients.map(cnt_id =>{
             // recipients was initially an array of id of contact
@@ -49,11 +52,20 @@ export const ConversationProvider = ({children}) => {
             return {id: cnt_id, name}
 
         })
-        return {...conversation,recipients}
+        const isSelected=selectedConversationIndex===index;
+        return {...conversation,recipients,isSelected}
     })
 
+    const value={
+        frmetd_cov_lis, // list of formatted conversation
+        setSelectedConversationIndex,   // function to change state of selectedConversation index
+        selectedConversationIndex,      // variable to store state of current selected conversation (index) in the list of frmted conversation
+        selectedconversation:frmetd_cov_lis[selectedConversationIndex], // stores currently selected conversation(object)
+        createConversation  // function to create a new conversation 
+    }
+
     return (
-        <ConversationContext.Provider value={{frmetd_cov_lis,createConversation}}>
+        <ConversationContext.Provider value={value}>
             {children}
         </ConversationContext.Provider>
     );

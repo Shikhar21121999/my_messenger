@@ -3,8 +3,11 @@ import {Modal, Button,Form} from 'react-bootstrap';
 import {useContacts} from '../Context/ContactsProvider'
 
 const NewContactModel = ({closeModal}) => {
+    // this is a functional component which is used
+    // to render out a Model and in turn is used to create a contact
 
     function handleSubmit(e) {
+        // function to create a new contact and then close the model
         e.preventDefault();
         createContact(idRef.current.value,nameRef.current.value);
         closeModal();
