@@ -60,7 +60,7 @@ export const ConversationProvider = ({children}) => {
         frmetd_cov_lis, // list of formatted conversation
         setSelectedConversationIndex,   // function to change state of selectedConversation index
         selectedConversationIndex,      // variable to store state of current selected conversation (index) in the list of frmted conversation
-        selectedconversation:frmetd_cov_lis[selectedConversationIndex], // stores currently selected conversation(object)
+        currselectedconversation:frmetd_cov_lis[selectedConversationIndex], // stores currently selected conversation(object)
         createConversation  // function to create a new conversation 
     }
 
