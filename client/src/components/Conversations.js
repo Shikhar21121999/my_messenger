@@ -7,9 +7,9 @@ const Conversations = () => {
     This component is used to render out conversation list
     this is also used to make a conversation selected
     */
-    const {frmetd_cov_lis,setSelectedConversationIndex,selectedConversationIndex} = useConversation();
+    const {frmetd_cov_lis,setSelectedConversationIndex} = useConversation();
+    console.log("formatted_conv_lis")
     console.log(frmetd_cov_lis)
-    console.log(selectedConversationIndex)
 
     return (
         <ListGroup>

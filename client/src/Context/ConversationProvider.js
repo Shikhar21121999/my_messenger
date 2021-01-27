@@ -12,12 +12,12 @@ export function useConversation(){
     return useContext(ConversationContext)
 }
 
-export const ConversationProvider = ({children}) => {
+export const ConversationProvider = ({id,children}) => {
     // logic of the features or function
     // to send with this context
     const [Conversation_lis,setConversation_lis]=useLocalStorage('conversations',[])
     const {contact_lis} = useContacts();
-    const [selectedConversationIndex,setSelectedConversationIndex]=useState(0)  // state to store currently selected conversation
+    const [selectedConversationIndex,setSelectedConversationIndex]=useState(-1)  // state to store currently selected conversation initially none is selected
     function createConversation(recipients){
         // function to create conversation
         // we store a conversation as an object consisting of recipients and messages
@@ -52,15 +52,85 @@ export const ConversationProvider = ({children}) => {
             return {id: cnt_id, name}
 
         })
+        const messages = conversation.messages.map(message => {
+            const link_cnt=contact_lis.find(contact => {
+                return contact.id===message.sender
+            })
+            const name= (link_cnt && link_cnt.name) || message.sender
+            const fromMe = id ===message.sender
+            return {...message,senderName:name,fromMe }
+        })
         const isSelected=selectedConversationIndex===index;
-        return {...conversation,recipients,isSelected}
+        return {...conversation, messages, recipients, isSelected}
     })
+
+    // function addmessagetoConversation(message){
+    //     // here we assume that a conversation is selected
+    //     // and we send the message from current user
+    //     // to all the recipients of the currently selected conversation
+    //     // for this we make changes to the message array of the currently selected conversation
+    //     // and add an aditional entry to it that is of message text and sender
+
+    //     console.log("before adding")
+    //     // lets make a message object
+    //     const msg_obj={sender:id,message}
+
+    //     // create a copy of conversation_lis
+    //     let conv_lis=Conversation_lis;
+
+    //     // add the message object to current_conversation in the list
+    //     conv_lis[selectedConversationIndex].messages.push(msg_obj)
+        
+    //     // change state of conversation_lis to this new lis
+    //     setConversation_lis(conv_lis)
+
+    // }
+
+    function addMessageToConversation({recipients,text,sender
+    }) {
+        // not gonna get this portion
+        setConversation_lis(prevConversations => {
+            let madeChange = false
+            const newMessage = {sender,text}
+            const newConversations = prevConversations.map
+            (conversation => {
+                if (arrayEquality(conversation.recipients,recipients))
+                {
+                    madeChange = true
+                    return {
+                        ...conversation,
+                        messages: [...conversation.messages, newMessage]
+                    }
+                }
+
+                return conversation
+            })
+
+            if (madeChange) {
+                return newConversations
+            }   else {
+                return [...prevConversations, 
+                    {recipients,messages: [newMessage]}
+                ]
+            }
+        })
+    }
+
+    
+    
+
+    function sendMessage(recipients, text) {
+        // socket.emit('send-message', { recipients, text })
+    
+        addMessageToConversation({ recipients, text, sender: id })
+    }
 
     const value={
         frmetd_cov_lis, // list of formatted conversation
         setSelectedConversationIndex,   // function to change state of selectedConversation index
         selectedConversationIndex,      // variable to store state of current selected conversation (index) in the list of frmted conversation
         currselectedconversation:frmetd_cov_lis[selectedConversationIndex], // stores currently selected conversation(object)
+        sendMessage,    // wrapper function to send message to all the recipients of the conversation
         createConversation  // function to create a new conversation 
     }
 
@@ -71,4 +141,13 @@ export const ConversationProvider = ({children}) => {
     );
 }
 
+function arrayEquality(a,b) {
+    if (a.length !== b.length) return false
 
+    a.sort()
+    b.sort()
+
+    return a.every((element,index) => {
+        return element === b[index]
+    })
+}

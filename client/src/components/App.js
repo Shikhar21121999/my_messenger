@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <ContactsProvider>
-      <ConversationProvider>
+      <ConversationProvider id={id}>
       {id ? <Dashboard id={id} /> : <Login submit_id={Setid} /> }
       {/* Setid is passed as arguement
           in Login component which is then

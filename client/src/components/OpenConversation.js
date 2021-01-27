@@ -11,19 +11,21 @@ const OpenConversation = () => {
 
     const {sendMessage,currselectedconversation} =useConversation()
 
+    const [text,setText]=useState('')
     function handelSubmit(e){
         e.preventDefault()
+        // ensure that message is sent only if there is a currently selectedconversation
         // message is sent from current id to all the recepients of selectedConversation
-        sendMessage(currselectedconversation.recipients.map(r=>r.id),
-        text
-        )
+        sendMessage(
+            currselectedconversation.recipients.map(r => r.id),
+            text
+          )
         setText('')
     }
-
-    const [text,setText]=useState('')
     return (
         <div className="d-flex flex-column flex-grow-1">
             <div className="flex-grow-1 overflow-auto">
+                
             </div>
             <Form onSubmit={handelSubmit}>
                 <Form.Group className="m-2">
