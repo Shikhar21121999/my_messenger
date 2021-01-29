@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useCallback } from 'react';
 import {Form,InputGroup,Button} from 'react-bootstrap'
 import {ListGroup} from 'react-bootstrap'
 import { useConversation } from '../Context/ConversationProvider';
@@ -10,6 +10,14 @@ const OpenConversation = () => {
     // so that it can be sent to people in the conversation
 
     const {sendMessage,currselectedconversation} =useConversation()
+    const setRef=useCallback(
+        (node) => {
+            if(node){
+                node.scrollIntoView({smooth:true})
+            }
+        },
+        [],
+    )
 
     const [text,setText]=useState('')
     function handelSubmit(e){
@@ -25,7 +33,30 @@ const OpenConversation = () => {
     return (
         <div className="d-flex flex-column flex-grow-1">
             <div className="flex-grow-1 overflow-auto">
-                
+                <div className="d-flex flex-column 
+                align-items-start justify-content-end px-3">
+                    {currselectedconversation.messages.map((message,index) =>{
+                        // check if the current message is lastmessage
+                        const lastMessage=currselectedconversation.messages.length-1===index
+                        return (
+                            <div 
+                            className={`my-1 d-flex flex-column
+                            ${message.fromMe ? 'align-self-end' : ''}`}
+                            key={index}
+                            ref={lastMessage ? setRef : null}
+                            >
+                                <div className={` rounded px-2 py-1 
+                                ${message.fromMe ? 'bg-primary text-white' : 'border'}`}>
+                                    {message.text}
+                                </div>
+                                <div className={`text-muted small 
+                                ${message.fromMe ? 'text-right' : ''}`}>
+                                    {message.fromMe ? 'You' : message.senderName}
+                                </div>    
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
             <Form onSubmit={handelSubmit}>
                 <Form.Group className="m-2">
