@@ -1,8 +1,9 @@
 // Context wrapper to pass conversations and createConversations method
 
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState,useEffect,useCallback} from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useContacts } from './ContactsProvider';
+import { useSocket } from './SocketProvider';
 
 
 const ConversationContext = React.createContext()   // context for Conversation
@@ -18,6 +19,7 @@ export const ConversationProvider = ({id,children}) => {
     const [Conversation_lis,setConversation_lis]=useLocalStorage('conversations',[])
     const {contact_lis} = useContacts();
     const [selectedConversationIndex,setSelectedConversationIndex]=useState(-1)  // state to store currently selected conversation initially none is selected
+    const socket=useSocket()
     function createConversation(recipients){
         // function to create conversation
         // we store a conversation as an object consisting of recipients and messages
@@ -86,8 +88,8 @@ export const ConversationProvider = ({id,children}) => {
 
     // }
 
-    function addMessageToConversation({recipients,text,sender
-    }) {
+    const addMessageToConversation=useCallback(({recipients,text,sender
+    }) => {
         // not gonna get this portion
         setConversation_lis(prevConversations => {
             let madeChange = false
@@ -114,14 +116,20 @@ export const ConversationProvider = ({id,children}) => {
                 ]
             }
         })
-    }
+    },[setConversation_lis])
 
     
-    
+    useEffect(() => {
+        if (socket == null) return
+        socket.on('receive-message',addMessageToConversation)
+        return () => {
+            socket.off('receive-message')
+        };
+    }, [socket,addMessageToConversation]);
 
     function sendMessage(recipients, text) {
         // socket.emit('send-message', { recipients, text })
-    
+        socket.emit('send-message', { recipients, text })
         addMessageToConversation({ recipients, text, sender: id })
     }
 

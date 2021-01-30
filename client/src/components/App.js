@@ -4,6 +4,7 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import Dashboard from './Dashboard';
 import {ContactsProvider} from '../Context/ContactsProvider';
 import { ConversationProvider } from '../Context/ConversationProvider';
+import SocketProvider from '../Context/SocketProvider';
 
 
 function App() {
@@ -12,18 +13,20 @@ function App() {
   
   return (
     <>
+    <SocketProvider id={id}>
       <ContactsProvider>
-      <ConversationProvider id={id}>
-      {id ? <Dashboard id={id} /> : <Login submit_id={Setid} /> }
-      {/* Setid is passed as arguement
-          in Login component which is then
-          used to change state of id
-          that is whenever submit_id is called
-          it will set the value to the id state
-      */}
+        <ConversationProvider id={id}>
+          {id ? <Dashboard id={id} /> : <Login submit_id={Setid} /> }
+          {/* Setid is passed as arguement
+              in Login component which is then
+              used to change state of id
+              that is whenever submit_id is called
+              it will set the value to the id state
+          */}
 
-      </ConversationProvider>
+        </ConversationProvider>
       </ContactsProvider>
+    </SocketProvider>
     </>
   );
 }
